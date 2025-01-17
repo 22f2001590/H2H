@@ -1,0 +1,4 @@
+id,service_id,customer_id,professional_id,needed_at,requirement_message,status,customer_feedback,professional_feedback,rating,created_at,updated_at
+1,1,2,5,2025-01-20T20:20:00,Kitchen cleaning needed.,closed,"good work, well done.",paid fully.,5,2025-01-16T05:45:56.483409,2025-01-16T05:47:18.047093
+2,1,1,5,2025-01-21T21:21:00,bathroom cleaning,closed,well cleaned,amount paid fully,3,2025-01-16T11:16:13.724626,2025-01-16T11:16:56.421256
+3,2,1,6,2025-01-21T21:21:00,toilet pipe fixing,closed,well done,"paid amount fully, nice customer",4,2025-01-16T12:02:22.920316,2025-01-16T12:03:21.593431
