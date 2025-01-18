@@ -35,13 +35,15 @@ celery_app = celery_init_app(app)
 
 with app.app_context():
     db.create_all(); setup_data()
+    import backend.celery.celery_schedule
+
 
 from backend.controller.login import *
 from backend.controller.admin_actions import *
 from backend.controller.customer_actions import *
 from backend.controller.professional_actions import *
 
-
+# import backend.celery.celery_schedule
 excel.init_excel(app)
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

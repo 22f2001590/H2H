@@ -1,0 +1,4 @@
+id,service_id,customer_id,professional_id,needed_at,requirement_message,status,customer_feedback,professional_feedback,rating,created_at,updated_at
+4,4,3,8,2025-01-19T19:19:00,kill rats,closed,"killed all rats, thanks.","paid fully, nice customer",5,2025-01-18T03:34:15.762055,2025-01-18T06:33:32.434310
+6,6,3,11,2025-01-19T15:00:00,need to change ram,closed,fixed neatly,paid fully,5,2025-01-18T14:50:57.654269,2025-01-18T14:51:58.926808
+7,6,3,,2025-01-20T20:26:00,need to fix hdd,requested,,,0,2025-01-18T14:53:41.666021,

@@ -1,11 +1,13 @@
 from flask import Flask, jsonify, make_response, request, render_template, session, flash, redirect, url_for
-from flask_jwt_extended import get_jwt_identity, get_jwt, verify_jwt_in_request
+from flask_jwt_extended import get_jwt_identity, get_jwt, verify_jwt_in_request, jwt_required
 from app import app
 from backend.tabels import *
 from sqlalchemy import func
+from backend.celery.mail_service import send_email
 
 # # customer dashboard
 @app.route('/live_requests', methods=['POST'])
+# @jwt_required()
 def live_requests():
     data = request.get_json()  # Get the JSON data from the request body
     
@@ -96,8 +98,12 @@ def book_now():
     db.session.add(new_service_request)
     db.session.commit()
 
+    for professional in Service.query.get(service_id).users:
+        send_email(f'{professional.email}', f'Got {professional.service.name} Request', f'<h1>Login and Accept</h1><p>Message: {requirement_message}</p>')
+
     # Return a success response
     return jsonify({"message": "Service booked successfully", "service_request_id": new_service_request.id}), 200
+    
 # @app.route('/book_now', methods=['GET', 'POST'])
 # def book_now():
 #     if request.method == 'POST':

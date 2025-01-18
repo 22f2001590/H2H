@@ -5,7 +5,7 @@ from backend.tabels import *
 from flask import current_app
 import logging
 import datetime
-# from Backend.celery.mail_service import send_email
+from backend.celery.mail_service import send_email
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -14,10 +14,10 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 
-@shared_task(ignore_result=False)
-def add(x, y):
-    time.sleep(10)
-    return x + y
+# @shared_task(ignore_result=False)
+# def add(x, y):
+#     time.sleep(10)
+#     return x + y
 
 @shared_task(bind=True, ignore_result=False)
 def create_csv(self, model_name=None):
@@ -96,6 +96,38 @@ def create_csv_by_id(self, model_name=None, cid=None, pid=None):
             "error": str(e)
         }
 
-# @shared_task(ignore_result=True)
-# def email_reminder(to, subject, content):
-#     send_email(to, subject, content)
+
+@shared_task(ignore_result=True)
+def email_reminder(subject, content):
+    for user in User.query.all():
+        send_email(user.email, subject, content)
+
+@shared_task(ignore_result=True)
+def email_monthly_report():
+
+    for customer in Role.query.filter_by(name="Customer").first().users:
+        # Define the email subject
+        subject = "Monthly Activity Report"
+        service_requests = customer.service_request_as_customer
+        requested_count, closed_count = 0, 0
+        for sr in service_requests:
+            if sr.status == 'requested':
+                requested_count += 1
+            elif sr.status == 'closed':
+                closed_count += 1
+        customer_content = f"""
+            <html>
+                <body>
+                    <h1>Cumulative Activity Report</h1>
+                    <p>Dear {customer.name},</p>
+                    <p>Status Summary:</p>
+                    <ul>
+                        <li>Currently requested: {requested_count}</li>
+                        <li>Closed: {closed_count}</li>
+                    </ul>
+                    <p>Thank you for using our services!</p>
+                </body>
+            </html>
+        """
+        send_email(customer.email, subject, customer_content)
+
